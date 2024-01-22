@@ -1,17 +1,46 @@
 ﻿using System.Collections.ObjectModel;
 
+
 namespace ControlWork_Komar
 {
     public class Application
     {
         private ObservableCollection<User> Users { get; set; }
-
+        private Timer autosaveTimer;
         public Application()
         {
+             
             Users = new ObservableCollection<User>();
-
+            autosaveTimer = new Timer(Autosave,null,0,10000);
+            LoadUsersFromFile();
         }
 
+        private void Autosave(object sender)
+        {
+            ObservableCollection<User> tmpUsers = MyFile.LoadUsersFromFile("UserDetails.json");
+            bool isDifferent = false;
+
+            if (Users.Count != tmpUsers.Count)
+            {
+                isDifferent = true;
+            }
+            else
+            {
+                for (int i = 0; i < Users.Count; i++)
+                {
+                    if (!Users[i].Equals(tmpUsers[i]))
+                    {
+                        isDifferent = true;
+                        break; 
+                    }
+                }
+            }
+            if (isDifferent)
+            {
+                SaveUsersToFile();
+                Console.WriteLine("\nAutosave");
+            }
+        }
         public void Run()
         {
             while (true)

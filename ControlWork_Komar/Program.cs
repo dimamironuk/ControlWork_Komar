@@ -8,7 +8,6 @@ namespace ControlWork_Komar
         {
             Console.OutputEncoding = Encoding.UTF8;
             Application app = new Application();
-            app.Run();
-        }
+            app.Run();        }
     }
 }
